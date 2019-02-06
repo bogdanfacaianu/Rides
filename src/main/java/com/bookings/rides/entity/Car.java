@@ -3,18 +3,15 @@ package com.bookings.rides.entity;
 public class Car {
 
     private CarType car_type;
+    private String supplierName;
     private double price;
 
-    public String getCar_type() {
-        return car_type.name();
-    }
-
-    public CarType getCarTypeObj() {
+    public CarType getCar_type() {
         return car_type;
     }
 
-    public void setCar_type(String car_type) {
-        this.car_type = CarType.valueOf(car_type);
+    public void setCar_type(CarType car_type) {
+        this.car_type = car_type;
     }
 
     public double getPrice() {
@@ -23,5 +20,13 @@ public class Car {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }
