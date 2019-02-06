@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public enum CarType {
-
     STANDARD(4),
     EXECUTIVE(4),
     LUXURY(4),

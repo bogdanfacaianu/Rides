@@ -5,10 +5,10 @@ import com.google.gson.Gson;
 public class Api {
 
     private String url;
-    private ApiClient client;
+    private ApiRestOperations client;
     private Gson gson;
 
-    public Api(String url, ApiClient client, Gson gson) {
+    public Api(String url, ApiRestOperations client, Gson gson) {
         this.url = url;
         this.client = client;
         this.gson = gson;
