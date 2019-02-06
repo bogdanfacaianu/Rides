@@ -45,4 +45,8 @@ public class SupplierResponse {
     public void sortOptionsByPriceDescending() {
         this.options.sort(Comparator.comparingDouble(Car::getPrice).reversed());
     }
+
+    public void filterCarOptionsByNumberOfPassengers(int maximumPassangers) {
+        options.removeIf(car -> car.getCarTypeObj().getSeats() > maximumPassangers);
+    }
 }

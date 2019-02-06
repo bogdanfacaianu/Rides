@@ -6,6 +6,21 @@ public class ResultResponse {
     private String supplier;
     private double price;
 
+    public ResultResponse(String carType, String supplier, double price) {
+        this.carType = carType;
+        this.supplier = supplier;
+        this.price = price;
+    }
+
+    public ResultResponse(String carType) {
+        this.carType = carType;
+    }
+
+    public ResultResponse(Car car) {
+        this.carType = car.getCar_type();
+        this.price = car.getPrice();
+    }
+
     public String getCarType() {
         return carType;
     }
