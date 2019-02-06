@@ -1,6 +1,6 @@
-package com.bookings.rides.entity;
+package com.bookings.rides.entity.response;
 
-import java.util.Comparator;
+import com.bookings.rides.entity.Car;
 import java.util.List;
 
 public class SupplierResponse {
@@ -40,13 +40,5 @@ public class SupplierResponse {
 
     public void setOptions(List<Car> options) {
         this.options = options;
-    }
-
-    public void sortOptionsByPriceDescending() {
-        this.options.sort(Comparator.comparingDouble(Car::getPrice).reversed());
-    }
-
-    public void filterCarOptionsByNumberOfPassengers(int maximumPassangers) {
-        options.removeIf(car -> car.getCarTypeObj().getSeats() > maximumPassangers);
     }
 }
