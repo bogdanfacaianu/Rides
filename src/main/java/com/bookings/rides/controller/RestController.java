@@ -3,14 +3,12 @@ package com.bookings.rides.controller;
 import com.bookings.rides.entity.Api;
 import com.bookings.rides.entity.ApiRestOperations;
 import com.bookings.rides.entity.Car;
-import com.bookings.rides.entity.CarType;
 import com.bookings.rides.entity.DaveApi;
 import com.bookings.rides.entity.EricApi;
 import com.bookings.rides.entity.JeffApi;
 import com.bookings.rides.entity.ResultResponse;
 import com.bookings.rides.entity.SupplierResponse;
 import com.google.gson.Gson;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -91,31 +89,35 @@ public class RestController {
 
         Map<String, ResultResponse> results = new HashMap<>();
 
-        Arrays.stream(CarType.values()).forEach(carType -> results.put(carType.name(), new ResultResponse(carType.name())));
-
         updateResultPrices(daveResponse, results);
         updateResultPrices(ericResponse, results);
         updateResultPrices(jeffResponse, results);
 
         List<ResultResponse> filteredResults = results.values().stream()
             .filter(resultResponse -> Objects.nonNull(resultResponse.getSupplier()))
+            .sorted(Comparator.comparingDouble(ResultResponse::getPrice))
             .collect(Collectors.toList());
-
-        filteredResults.sort(Comparator.comparingDouble(ResultResponse::getPrice));
 
         return gson.toJson(filteredResults);
     }
 
     private void updateResultPrices(SupplierResponse supplierResponse, Map<String, ResultResponse> results) {
         for (Car car : supplierResponse.getOptions()) {
-            ResultResponse resultResponse = results.get(car.getCar_type());
-            double currentPrice = resultResponse.getPrice();
-            if (currentPrice == 0 || resultResponse.getPrice() > car.getPrice()) {
+            if (results.containsKey(car.getCar_type())) {
+                ResultResponse resultResponse = results.get(car.getCar_type());
+                double currentPrice = resultResponse.getPrice();
+                if (currentPrice == 0 || resultResponse.getPrice() > car.getPrice()) {
+                    resultResponse.setPrice(car.getPrice());
+                    resultResponse.setSupplier(supplierResponse.getSupplier_id());
+                    results.replace(car.getCar_type(), resultResponse);
+                }
+            } else {
+                ResultResponse resultResponse = new ResultResponse(car);
                 resultResponse.setPrice(car.getPrice());
                 resultResponse.setSupplier(supplierResponse.getSupplier_id());
-                results.replace(car.getCar_type(), resultResponse);
+                results.put(car.getCar_type(), resultResponse);
             }
         }
-    }
 
+    }
 }
