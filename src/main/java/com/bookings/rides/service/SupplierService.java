@@ -1,6 +1,7 @@
 package com.bookings.rides.service;
 
 import com.bookings.rides.entity.Car;
+import com.bookings.rides.entity.JsonHelper;
 import com.bookings.rides.entity.api.Api;
 import com.bookings.rides.entity.response.SupplierResponse;
 import java.util.ArrayList;
@@ -24,7 +25,10 @@ public class SupplierService {
     @Qualifier("dave")
     private Api daveApi;
 
-    public Collection<Car> getSupplierResponses(String pickup, String dropoff, int maximumPassengers) {
+    @Autowired
+    private JsonHelper jsonHelper;
+
+    public List<Car> getSupplierResponses(String pickup, String dropoff, int maximumPassengers) {
         List<Car> cars = new ArrayList<>();
 
         supplierApis.forEach(api -> {
@@ -34,14 +38,17 @@ public class SupplierService {
                 cars.addAll(response.getOptions());
             });
         });
+        return filterResultsByPassengersAndPrice(cars, maximumPassengers);
+    }
 
+    private List<Car> filterResultsByPassengersAndPrice(List<Car> cars, int maximumPassengers) {
         cars.removeIf(car -> car.getCar_type().getSeats() > maximumPassengers);
         ArrayList<Car> filteredCars = new ArrayList<>(filterCarResults(cars));
         sortList(filteredCars, true);
         return filteredCars;
     }
 
-    public Collection<Car> getDaveResponse(String pickup, String dropoff, boolean priceDescending) {
+    public List<Car> getDaveResponse(String pickup, String dropoff, boolean priceDescending) {
         List<Car> cars = new ArrayList<>();
         Optional<SupplierResponse> davesResponse = daveApi.get(pickup, dropoff);
         davesResponse.ifPresent(response -> cars.addAll(response.getOptions()));
@@ -50,7 +57,6 @@ public class SupplierService {
         }
         return cars;
     }
-
 
     private Collection<Car> filterCarResults(List<Car> cars) {
         Map<String, Car> filteredResults = new HashMap<>();
@@ -70,6 +76,10 @@ public class SupplierService {
         } else {
             list.sort(Comparator.comparingDouble(Car::getPrice));
         }
+    }
+
+    public String convertToJson(List<Car> options) {
+        return jsonHelper.convertToJsonOutput(options);
     }
 
 }
