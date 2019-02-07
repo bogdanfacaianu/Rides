@@ -36,7 +36,6 @@ public class ApiRestOperationsTest extends RidesTestHelper {
     @Test
     public void testApiResponse() {
         SupplierResponse supplierResponse = createSupplierResponse(DAVE, new ArrayList<>());
-
         when(restTemplate.getForObject(url, SupplierResponse.class)).thenReturn(supplierResponse);
         Optional<SupplierResponse> response = api.getResponse(url);
 
@@ -55,7 +54,6 @@ public class ApiRestOperationsTest extends RidesTestHelper {
     @Test
     public void testApiResponse_throwsException() {
         when(restTemplate.getForObject(url, SupplierResponse.class)).thenThrow(RestClientException.class);
-
         Optional<SupplierResponse> response = api.getResponse(url);
 
         assertThat(response).isEqualTo(Optional.empty());

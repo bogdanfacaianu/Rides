@@ -20,8 +20,8 @@ public class RidesController {
 
     @GetMapping(value = "/getCarOptions", produces = "application/json")
     public String getOffers(@RequestParam(value = "pickup") String pickup,
-        @RequestParam(value = "dropoff") String dropoff,
-        @RequestParam(value = "maximumPassengers", required = false, defaultValue = "16") int maximumPassengers) {
+                            @RequestParam(value = "dropoff") String dropoff,
+                            @RequestParam(value = "maximumPassengers", required = false, defaultValue = "16") int maximumPassengers) {
         List<Car> result = supplierService.getSupplierResponses(pickup, dropoff, maximumPassengers);
         return supplierService.convertToJson(result);
     }
