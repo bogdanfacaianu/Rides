@@ -28,7 +28,7 @@ public class SupplierService {
     @Autowired
     private JsonHelper jsonHelper;
 
-    public String getSupplierResponses(String pickup, String dropoff, int maximumPassengers) {
+    public List<Car> getSupplierResponses(String pickup, String dropoff, int maximumPassengers) {
         List<Car> cars = new ArrayList<>();
 
         supplierApis.forEach(api -> {
@@ -38,27 +38,25 @@ public class SupplierService {
                 cars.addAll(response.getOptions());
             });
         });
-
         return filterResultsByPassengersAndPrice(cars, maximumPassengers);
     }
 
-    private String filterResultsByPassengersAndPrice(List<Car> cars, int maximumPassengers) {
+    private List<Car> filterResultsByPassengersAndPrice(List<Car> cars, int maximumPassengers) {
         cars.removeIf(car -> car.getCar_type().getSeats() > maximumPassengers);
         ArrayList<Car> filteredCars = new ArrayList<>(filterCarResults(cars));
         sortList(filteredCars, true);
-        return jsonHelper.convertToJsonOutput(filteredCars);
+        return filteredCars;
     }
 
-    public String getDaveResponse(String pickup, String dropoff, boolean priceDescending) {
+    public List<Car> getDaveResponse(String pickup, String dropoff, boolean priceDescending) {
         List<Car> cars = new ArrayList<>();
         Optional<SupplierResponse> davesResponse = daveApi.get(pickup, dropoff);
         davesResponse.ifPresent(response -> cars.addAll(response.getOptions()));
         if (priceDescending) {
             sortList(cars, priceDescending);
         }
-        return jsonHelper.convertToJsonOutput(cars);
+        return cars;
     }
-
 
     private Collection<Car> filterCarResults(List<Car> cars) {
         Map<String, Car> filteredResults = new HashMap<>();
@@ -78,6 +76,10 @@ public class SupplierService {
         } else {
             list.sort(Comparator.comparingDouble(Car::getPrice));
         }
+    }
+
+    public String convertToJson(List<Car> options) {
+        return jsonHelper.convertToJsonOutput(options);
     }
 
 }
