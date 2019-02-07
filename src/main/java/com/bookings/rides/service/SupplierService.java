@@ -1,6 +1,7 @@
 package com.bookings.rides.service;
 
 import com.bookings.rides.entity.Car;
+import com.bookings.rides.entity.JsonHelper;
 import com.bookings.rides.entity.api.Api;
 import com.bookings.rides.entity.response.SupplierResponse;
 import java.util.ArrayList;
@@ -24,7 +25,10 @@ public class SupplierService {
     @Qualifier("dave")
     private Api daveApi;
 
-    public Collection<Car> getSupplierResponses(String pickup, String dropoff, int maximumPassengers) {
+    @Autowired
+    private JsonHelper jsonHelper;
+
+    public String getSupplierResponses(String pickup, String dropoff, int maximumPassengers) {
         List<Car> cars = new ArrayList<>();
 
         supplierApis.forEach(api -> {
@@ -35,20 +39,24 @@ public class SupplierService {
             });
         });
 
+        return filterResultsByPassengersAndPrice(cars, maximumPassengers);
+    }
+
+    private String filterResultsByPassengersAndPrice(List<Car> cars, int maximumPassengers) {
         cars.removeIf(car -> car.getCar_type().getSeats() > maximumPassengers);
         ArrayList<Car> filteredCars = new ArrayList<>(filterCarResults(cars));
         sortList(filteredCars, true);
-        return filteredCars;
+        return jsonHelper.convertToJsonOutput(filteredCars);
     }
 
-    public Collection<Car> getDaveResponse(String pickup, String dropoff, boolean priceDescending) {
+    public String getDaveResponse(String pickup, String dropoff, boolean priceDescending) {
         List<Car> cars = new ArrayList<>();
         Optional<SupplierResponse> davesResponse = daveApi.get(pickup, dropoff);
         davesResponse.ifPresent(response -> cars.addAll(response.getOptions()));
         if (priceDescending) {
             sortList(cars, priceDescending);
         }
-        return cars;
+        return jsonHelper.convertToJsonOutput(cars);
     }
 
 
