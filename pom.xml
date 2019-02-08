@@ -8,15 +8,13 @@
     <version>2.1.2.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
+
   <groupId>com.bookings.rides</groupId>
   <artifactId>rides-api</artifactId>
-  <version>0.0.1</version>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
   <name>rides</name>
   <description></description>
-
-  <properties>
-    <java.version>1.8</java.version>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -32,7 +30,8 @@
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-dev-tools</artifactId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -53,6 +52,17 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          <configuration>
+            <classifier>spring-boot</classifier>
+            <mainClass>com.bookings.rides.RidesApplication</mainClass>
+          </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
