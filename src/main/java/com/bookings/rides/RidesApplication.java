@@ -4,8 +4,6 @@ import com.bookings.rides.entity.Car;
 import com.bookings.rides.entity.CarType;
 import com.bookings.rides.service.SupplierService;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -34,6 +32,8 @@ public class RidesApplication implements CommandLineRunner {
             String offers = supplierService.convertToJson(response);
 
             System.out.println(offers);
+
+            System.exit(0);
         }
     }
 
