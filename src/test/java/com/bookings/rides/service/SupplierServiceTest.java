@@ -54,7 +54,7 @@ public class SupplierServiceTest extends RidesTestHelper {
     public void testDaveResponse() {
         SupplierResponse supplierResponse = mockDaveApiCall(CarType.STANDARD);
 
-        List<Car> response = supplierService.getDaveResponse(PICKUP, DROPOFF, false);
+        List<Car> response = supplierService.getSingleApiResponse(PICKUP, DROPOFF, false);
 
         assertThat(response).isNotEmpty();
         assertThat(response.size()).isEqualTo(supplierResponse.getOptions().size());

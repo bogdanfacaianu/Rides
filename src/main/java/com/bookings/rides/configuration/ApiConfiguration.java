@@ -16,18 +16,18 @@ public class ApiConfiguration {
     @Bean
     @Qualifier("dave")
     public Api getDaveApi() {
-        return apiFactory.getApi("https://techtest.rideways.com/dave");
+        return apiFactory.getApi("https://techtest.rideways.com/dave", "dave");
     }
 
     @Bean
     @Qualifier("eric")
     public Api getEricApi() {
-        return apiFactory.getApi("https://techtest.rideways.com/eric");
+        return apiFactory.getApi("https://techtest.rideways.com/eric", "eric");
     }
 
     @Bean
     @Qualifier("jeff")
     public Api getJeffApi() {
-        return apiFactory.getApi("https://techtest.rideways.com/jeff");
+        return apiFactory.getApi("https://techtest.rideways.com/jeff", "jeff");
     }
 }

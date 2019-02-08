@@ -30,7 +30,16 @@ public class RidesController {
     public String getOffersFromDave(@RequestParam(value = "pickup") String pickup,
                                     @RequestParam(value = "dropoff") String dropoff,
                                     @RequestParam(value = "priceDescending", required = false, defaultValue = "false") boolean priceDescending) {
-        List<Car> result = supplierService.getDaveResponse(pickup, dropoff, priceDescending);
+        List<Car> result = supplierService.getSingleApiResponse(pickup, dropoff, priceDescending, "daveApi");
+        return supplierService.convertToJson(result);
+    }
+
+    @GetMapping(value = "/getSingleCarOptions", produces = "application/json")
+    public String getOffersFromSingleApi(@RequestParam(value = "pickup") String pickup,
+        @RequestParam(value = "dropoff") String dropoff,
+        @RequestParam(value = "priceDescending", required = false, defaultValue = "false")  boolean priceDescending,
+        @RequestParam(value = "api") String apiName) {
+        List<Car> result = supplierService.getSingleApiResponse(pickup, dropoff, priceDescending, apiName);
         return supplierService.convertToJson(result);
     }
 }

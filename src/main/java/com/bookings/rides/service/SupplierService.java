@@ -19,11 +19,7 @@ import org.springframework.stereotype.Service;
 public class SupplierService {
 
     @Autowired
-    private List<Api> supplierApis;
-
-    @Autowired
-    @Qualifier("dave")
-    private Api daveApi;
+    private ApiCache apiCache;
 
     @Autowired
     private JsonHelper jsonHelper;
@@ -31,7 +27,7 @@ public class SupplierService {
     public List<Car> getSupplierResponses(String pickup, String dropoff, int maximumPassengers) {
         List<Car> cars = new ArrayList<>();
 
-        supplierApis.forEach(api -> {
+        apiCache.getApis().forEach(api -> {
             Optional<SupplierResponse> supplierResponse = api.get(pickup, dropoff);
             supplierResponse.ifPresent(response -> {
                 response.getOptions().forEach(car -> car.setSupplierName(response.getSupplier_id()));
@@ -48,10 +44,10 @@ public class SupplierService {
         return filteredCars;
     }
 
-    public List<Car> getDaveResponse(String pickup, String dropoff, boolean priceDescending) {
+    public List<Car> getSingleApiResponse(String pickup, String dropoff, boolean priceDescending, String apiName) {
         List<Car> cars = new ArrayList<>();
-        Optional<SupplierResponse> davesResponse = daveApi.get(pickup, dropoff);
-        davesResponse.ifPresent(response -> cars.addAll(response.getOptions()));
+        Optional<SupplierResponse> apiResponse = apiCache.getApi(apiName).get(pickup, dropoff);
+        apiResponse.ifPresent(response -> cars.addAll(response.getOptions()));
         if (priceDescending) {
             sortList(cars, priceDescending);
         }

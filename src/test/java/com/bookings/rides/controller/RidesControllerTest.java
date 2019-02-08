@@ -44,7 +44,7 @@ public class RidesControllerTest {
             .param("dropoff", DROPOFF))
             .andExpect(status().isOk());
 
-        verify(supplierService).getDaveResponse(PICKUP, DROPOFF, false);
+        verify(supplierService).getSingleApiResponse(PICKUP, DROPOFF, false);
         verify(supplierService).convertToJson(any());
         verifyNoMoreInteractions(supplierService);
     }
@@ -66,7 +66,7 @@ public class RidesControllerTest {
             .param("priceDescending", String.valueOf(PRICE_DESCENDING)))
             .andExpect(status().isOk());
 
-        verify(supplierService).getDaveResponse(PICKUP, DROPOFF, PRICE_DESCENDING);
+        verify(supplierService).getSingleApiResponse(PICKUP, DROPOFF, PRICE_DESCENDING);
         verify(supplierService).convertToJson(any());
         verifyNoMoreInteractions(supplierService);
     }
