@@ -2,9 +2,12 @@ package com.bookings.rides;
 
 import com.bookings.rides.entity.Car;
 import com.bookings.rides.entity.CarType;
+import com.bookings.rides.entity.api.Api;
 import com.bookings.rides.entity.response.SupplierResponse;
 import java.util.ArrayList;
 import java.util.List;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class RidesTestHelper {
 
@@ -15,7 +18,18 @@ public class RidesTestHelper {
     public static final String JEFF = "JEFF";
     public static final int DEFAULT_MAXIMUM_PASSENGERS = 16;
     public static final int MAXIMUM_PASSENGERS = 6;
-    public static final boolean PRICE_DESCENDING = true;
+
+    @Mock
+    @Qualifier("dave")
+    protected Api daveApi;
+
+    @Mock
+    @Qualifier("eric")
+    protected Api ericApi;
+
+    @Mock
+    @Qualifier("jeff")
+    protected Api jeffApi;
 
     public SupplierResponse createSupplierResponse(String supplierName, List<Car> options) {
         SupplierResponse supplierResponse = new SupplierResponse();

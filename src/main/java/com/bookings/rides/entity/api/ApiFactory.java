@@ -13,7 +13,7 @@ public class ApiFactory {
         this.apiRestOperations = apiRestOperations;
     }
 
-    public Api getApi(String url) {
-        return new Api(url, apiRestOperations);
+    public Api getApi(String url, String name) {
+        return new Api(url, apiRestOperations, name);
     }
 }
