@@ -1,7 +1,10 @@
 package com.bookings.rides.service;
 
+import static com.bookings.rides.common.ConstantValues.MINIMUM_ALLOWED_MAXIMUM_PASSENGERS;
+
 import com.bookings.rides.entity.Car;
 import com.bookings.rides.common.JsonHelper;
+import com.bookings.rides.entity.CarType;
 import com.bookings.rides.entity.api.ApiCache;
 import com.bookings.rides.entity.response.SupplierResponse;
 import java.util.ArrayList;
@@ -37,7 +40,8 @@ public class SupplierService {
     }
 
     private List<Car> filterResultsByPassengersAndPrice(List<Car> cars, int maximumPassengers) {
-        cars.removeIf(car -> car.getCar_type().getSeats() > maximumPassengers);
+        final int passengers = maximumPassengers < 1 ? MINIMUM_ALLOWED_MAXIMUM_PASSENGERS : maximumPassengers;
+        cars.removeIf(car -> car.getCar_type().getSeats() > passengers);
         ArrayList<Car> filteredCars = new ArrayList<>(filterCarResults(cars));
         sortList(filteredCars, true);
         return filteredCars;

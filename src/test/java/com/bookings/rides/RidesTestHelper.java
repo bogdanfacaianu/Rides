@@ -18,6 +18,7 @@ public class RidesTestHelper {
     public static final String JEFF = "JEFF";
     public static final int DEFAULT_MAXIMUM_PASSENGERS = 16;
     public static final int MAXIMUM_PASSENGERS = 6;
+    public static final int UNDERVALUED_MAXIMUM_PASSENGERS = 0;
 
     @Mock
     @Qualifier("dave")

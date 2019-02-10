@@ -91,6 +91,22 @@ public class SupplierServiceTest extends RidesTestHelper {
     }
 
     @Test
+    public void testAllSuppliersResponse_withUnderValuednumberOfPassengers() {
+        mockDaveApiCall(CarType.STANDARD);
+        mockEricApiCall(CarType.PEOPLE_CARRIER);
+        mockJeffApiCall(CarType.MINIBUS);
+
+        when(apiCache.getApis()).thenReturn(Arrays.asList(daveApi, ericApi, jeffApi));
+
+        List<Car> response = supplierService.getSupplierResponses(PICKUP, DROPOFF, UNDERVALUED_MAXIMUM_PASSENGERS);
+        assertThat(response.size()).isEqualTo(1);
+        Car option1 = response.get(0);
+        assertThat(option1.getSupplierName()).isEqualTo(DAVE);
+        assertThat(option1.getPrice()).isNonZero();
+        assertThat(option1.getCar_type()).isEqualTo(CarType.STANDARD);
+    }
+
+    @Test
     public void testJsonOutput() {
         when(jsonHelper.convertToJsonOutput(any())).thenReturn(JSON_OUTPUT);
 
