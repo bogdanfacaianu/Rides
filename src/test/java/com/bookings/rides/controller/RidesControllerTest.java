@@ -1,10 +1,10 @@
 package com.bookings.rides.controller;
 
+import static com.bookings.rides.RidesTestHelper.DAVE;
 import static com.bookings.rides.RidesTestHelper.DEFAULT_MAXIMUM_PASSENGERS;
 import static com.bookings.rides.RidesTestHelper.DROPOFF;
 import static com.bookings.rides.RidesTestHelper.MAXIMUM_PASSENGERS;
 import static com.bookings.rides.RidesTestHelper.PICKUP;
-import static com.bookings.rides.RidesTestHelper.PRICE_DESCENDING;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -39,36 +39,24 @@ public class RidesControllerTest {
 
     @Test
     public void testGettingOffersFromDave() throws Exception {
-        mockMvc.perform(get("/getOptionsFromDave")
+        mockMvc.perform(get("/getSupplierCarOptions")
             .param("pickup", PICKUP)
-            .param("dropoff", DROPOFF))
+            .param("dropoff", DROPOFF)
+            .param("supplier", DAVE))
             .andExpect(status().isOk());
 
-        verify(supplierService).getSingleApiResponse(PICKUP, DROPOFF, false);
+        verify(supplierService).getSingleApiResponse(PICKUP, DROPOFF, DAVE);
         verify(supplierService).convertToJson(any());
         verifyNoMoreInteractions(supplierService);
     }
 
     @Test
     public void testGettingOffersFromDave_withNoPickup() throws Exception {
-        mockMvc.perform(get("/getOptionsFromDave")
+        mockMvc.perform(get("/getSupplierCarOptions")
             .param("dropoff", DROPOFF))
             .andExpect(status().isBadRequest());
 
         verifyZeroInteractions(supplierService);
-    }
-
-    @Test
-    public void testGettingOffersFromDaveWithSortedPrices() throws Exception {
-        mockMvc.perform(get("/getOptionsFromDave")
-            .param("pickup", PICKUP)
-            .param("dropoff", DROPOFF)
-            .param("priceDescending", String.valueOf(PRICE_DESCENDING)))
-            .andExpect(status().isOk());
-
-        verify(supplierService).getSingleApiResponse(PICKUP, DROPOFF, PRICE_DESCENDING);
-        verify(supplierService).convertToJson(any());
-        verifyNoMoreInteractions(supplierService);
     }
 
     @Test

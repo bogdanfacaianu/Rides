@@ -1,5 +1,7 @@
 package com.bookings.rides.controller;
 
+import static com.bookings.rides.common.ConstantValues.DAVE;
+
 import com.bookings.rides.entity.Car;
 import com.bookings.rides.service.SupplierService;
 import java.util.List;
@@ -26,20 +28,11 @@ public class RidesController {
         return supplierService.convertToJson(result);
     }
 
-    @GetMapping(value = "/getOptionsFromDave", produces = "application/json")
-    public String getOffersFromDave(@RequestParam(value = "pickup") String pickup,
-                                    @RequestParam(value = "dropoff") String dropoff,
-                                    @RequestParam(value = "priceDescending", required = false, defaultValue = "false") boolean priceDescending) {
-        List<Car> result = supplierService.getSingleApiResponse(pickup, dropoff, priceDescending, "daveApi");
-        return supplierService.convertToJson(result);
-    }
-
-    @GetMapping(value = "/getSingleCarOptions", produces = "application/json")
+    @GetMapping(value = "/getSupplierCarOptions", produces = "application/json")
     public String getOffersFromSingleApi(@RequestParam(value = "pickup") String pickup,
-        @RequestParam(value = "dropoff") String dropoff,
-        @RequestParam(value = "priceDescending", required = false, defaultValue = "false")  boolean priceDescending,
-        @RequestParam(value = "api") String apiName) {
-        List<Car> result = supplierService.getSingleApiResponse(pickup, dropoff, priceDescending, apiName);
+                                         @RequestParam(value = "dropoff") String dropoff,
+                                         @RequestParam(value = "supplier", required = false, defaultValue = DAVE) String apiName) {
+        List<Car> result = supplierService.getSingleApiResponse(pickup, dropoff, apiName);
         return supplierService.convertToJson(result);
     }
 }

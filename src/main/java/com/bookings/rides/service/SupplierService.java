@@ -1,8 +1,8 @@
 package com.bookings.rides.service;
 
 import com.bookings.rides.entity.Car;
-import com.bookings.rides.entity.JsonHelper;
-import com.bookings.rides.entity.api.Api;
+import com.bookings.rides.common.JsonHelper;
+import com.bookings.rides.entity.api.ApiCache;
 import com.bookings.rides.entity.response.SupplierResponse;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,13 +43,11 @@ public class SupplierService {
         return filteredCars;
     }
 
-    public List<Car> getSingleApiResponse(String pickup, String dropoff, boolean priceDescending, String apiName) {
+    public List<Car> getSingleApiResponse(String pickup, String dropoff, String apiName) {
         List<Car> cars = new ArrayList<>();
         Optional<SupplierResponse> apiResponse = apiCache.getApi(apiName).get(pickup, dropoff);
         apiResponse.ifPresent(response -> cars.addAll(response.getOptions()));
-        if (priceDescending) {
-            sortList(cars, priceDescending);
-        }
+        sortList(cars, true);
         return cars;
     }
 
